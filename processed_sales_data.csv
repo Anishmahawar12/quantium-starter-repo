@@ -1,1 +1,6 @@
-sales,date,region
+date,region,product,quantity,price,sales
+01-01-2021,North,Pink Morsel,100,10,1200
+02-01-2021,South,Pink Morsel,80,12,960
+03-01-2021,North,Blue Widget,150,8,800
+04-01-2021,South,Blue Widget,120,7,640
+05-01-2021,north,Blue Widget,200,9,1600
