@@ -1,0 +1,9 @@
+date,sales,region,x,y,z,category
+01-01-2023,100,north,10,20,30,category1
+02-01-2023,150,east,15,25,35,category2
+03-01-2023,200,south,20,30,40,category1
+04-01-2023,120,west,25,35,45,category3
+05-01-2023,180,north,,,,
+06-01-2023,140,east,,,,
+07-01-2023,210,south,,,,
+08-01-2023,130,west,,,,

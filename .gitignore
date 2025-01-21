@@ -130,3 +130,80 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+# Ignore system files and directories
+AppData/
+Application Data/
+*.dat
+*.log
+*.bak
+*.swp
+
+# Ignore IDE/Editor files
+.vscode/
+.idea/
+*.iml
+
+# Ignore virtual environment
+env/
+venv/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python compiled files
+__pycache__/
+
+# Ignore other temporary files
+*.tmp
+*.bak
+# Ignore system files and directories
+AppData/
+Application Data/
+*.dat
+*.log
+*.bak
+*.swp
+
+# Ignore IDE/Editor files
+.vscode/
+.idea/
+*.iml
+
+# Ignore virtual environment
+env/
+venv/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python compiled files
+__pycache__/
+
+# Ignore other temporary files
+*.tmp
+*.bak
+# Ignore system files
+AppData/
+Application Data/
+.VPNMaster/
+.anaconda/
+.android/
+.cache/
+.conda/
+.config/
+.ipynb_checkpoints/
+.jupyter/
+.vscode/
+ntuser*
+
+# Ignore virtual environments
+env/
+venv/
+
+# Ignore other irrelevant folders
+Desktop/
+Documents/
+Downloads/
+Pictures/
+Music/
+Videos/

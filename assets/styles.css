@@ -1,0 +1,37 @@
+/* Custom CSS for the Dashboard */
+
+body {
+    background-color: #12131c;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.header-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #f5c518;
+}
+
+.container {
+    padding: 20px;
+}
+
+.dropdown {
+    margin-bottom: 20px;
+    color: #000000; /* Black font inside dropdown */
+}
+
+.graph-container {
+    background-color: #1e2130;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.graph-title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #f5c518;
+}

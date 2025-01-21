@@ -1,89 +1,79 @@
 import dash
 from dash import dcc, html
-import plotly.express as px
+import dash_bootstrap_components as dbc
+import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
-# Load the processed data
-data = pd.read_csv('processed_sales_data.csv')
+# Generate synthetic 3D data (or replace with actual data)
+x, y, z = np.mgrid[-50:50:25j, -50:50:25j, -50:50:25j]
+values = np.sqrt(x**2 + y**2 + z**2) + np.sin(x) + np.cos(y)
 
-# Verify columns and add 'sales' if not present
-if 'sales' not in data.columns:
-    data['sales'] = data['price'] * data['quantity']
+# Initialize the Dash app
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, "/assets/styles.css"])
 
-# Convert the 'date' column to datetime format
-data['date'] = pd.to_datetime(data['date'])
-
-# Remove rows with missing values
-data = data.dropna(subset=['product', 'region', 'date', 'sales'])
-
-# Extract unique products
-unique_products = data['product'].unique()
-
-# Create the Dash app
-app = dash.Dash(__name__)
-
-# Layout of the app
-app.layout = html.Div([
-    html.H1("Sales Analysis: Impact of Pink Morsel Price Increase", style={'textAlign': 'center'}),
-    
-    # Dropdown for product selection
-    html.Div([
-        html.H2("Select Product"),
-        dcc.Dropdown(
-            id='product-dropdown',
-            options=[{'label': product, 'value': product} for product in unique_products],
-            value=unique_products[0],  # Default value
-            style={'width': '50%'}
-        )
-    ], style={'textAlign': 'center', 'marginBottom': '20px'}),
-
-    # Graph for displaying sales data
-    dcc.Graph(id='sales-graph'),
-
-    # Div for displaying sales summary insights
-    html.Div(id='sales-summary', style={'textAlign': 'center', 'marginTop': '20px', 'fontSize': '18px'})
-])
-
-# Callback to update the graph and display insights
-@app.callback(
-    [Output('sales-graph', 'figure'),
-     Output('sales-summary', 'children')],
-    Input('product-dropdown', 'value')
+# App layout
+app.layout = html.Div(
+    className="container",
+    children=[
+        html.H1("Interactive 3D Isosurface Visualization", className="header-title"),
+        dcc.Slider(
+            id="iso-slider",
+            min=values.min(),
+            max=values.max(),
+            step=0.5,
+            value=(values.min() + values.max()) / 2,
+            marks={int(i): f"{int(i)}" for i in np.linspace(values.min(), values.max(), 5)},
+            tooltip={"placement": "bottom", "always_visible": True},
+        ),
+        html.Div(
+            className="graph-container",
+            children=[
+                html.Div("Explore 3D Data", className="graph-title"),
+                dcc.Graph(id="3d-graph"),
+            ],
+        ),
+    ],
 )
-def update_graph(selected_product):
-    # Filter data based on selected product
-    filtered_data = data[data['product'] == selected_product]
 
-    # Split data into before and after January 15, 2021
-    before_data = filtered_data[filtered_data['date'] < '2021-01-15']
-    after_data = filtered_data[filtered_data['date'] >= '2021-01-15']
+# Callback for updating the 3D graph
+@app.callback(
+    Output("3d-graph", "figure"),
+    Input("iso-slider", "value"),
+)
+def update_3d_graph(iso_value):
+    fig = go.Figure()
 
-    # Calculate total sales for each period
-    before_sales = before_data['sales'].sum()
-    after_sales = after_data['sales'].sum()
-
-    # Determine which period had higher sales
-    if before_sales > after_sales:
-        result = "Sales were higher before the price increase."
-    else:
-        result = "Sales were higher after the price increase."
-
-    # Create the line chart
-    fig = px.line(
-        filtered_data,
-        x='date',
-        y='sales',
-        title=f'Sales Over Time for {selected_product}',
-        labels={'sales': 'Sales ($)', 'date': 'Date'}
+    # Add isosurface
+    fig.add_trace(
+        go.Isosurface(
+            x=x.flatten(),
+            y=y.flatten(),
+            z=z.flatten(),
+            value=values.flatten(),
+            isomin=iso_value - 0.5,
+            isomax=iso_value + 0.5,
+            surface_count=5,  # Number of layers
+            colorscale="Viridis",  # Attractive colors
+            caps=dict(x_show=False, y_show=False, z_show=False),
+        )
     )
 
-    # Generate sales summary
-    summary = f"Total sales before January 15, 2021: ${before_sales:.2f}. " \
-              f"Total sales after January 15, 2021: ${after_sales:.2f}. {result}"
+    # Customize layout
+    fig.update_layout(
+        scene=dict(
+            xaxis=dict(title="X-axis", backgroundcolor="#12131c", gridcolor="#2f2f2f"),
+            yaxis=dict(title="Y-axis", backgroundcolor="#12131c", gridcolor="#2f2f2f"),
+            zaxis=dict(title="Z-axis", backgroundcolor="#12131c", gridcolor="#2f2f2f"),
+        ),
+        paper_bgcolor="#1e2130",  # Background
+        font=dict(color="#ffffff"),  # Text color
+        title="Interactive 3D Isosurface Visualization",
+    )
 
-    return fig, summary
+    return fig
 
-# Run the app
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run_server(debug=True)
