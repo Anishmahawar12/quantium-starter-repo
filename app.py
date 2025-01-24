@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
-# Generate synthetic 3D data (or replace with actual data)
+# Generate synthetic 3D data
 x, y, z = np.mgrid[-50:50:25j, -50:50:25j, -50:50:25j]
 values = np.sqrt(x**2 + y**2 + z**2) + np.sin(x) + np.cos(y)
 
